@@ -7,8 +7,14 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
+    guid: 1a8e0a679bd55794597ca1a7ad610e5a
+  - enabled: 1
+    path: Assets/Scenes/PongMenu.unity
     guid: d3ba9d1089a27304cbaa6f1334dd06b6
   - enabled: 1
-    path: Assets/Scenes/Gameplay.unity
+    path: Assets/Scenes/PongGameplay.unity
     guid: 29cbd9c82aead324481ded2afe966abc
+  - enabled: 1
+    path: Assets/Scenes/NetworkTestQuickstart.unity
+    guid: 965bc383aeef48f4dac9ef65b517db07
   m_configObjects: {}

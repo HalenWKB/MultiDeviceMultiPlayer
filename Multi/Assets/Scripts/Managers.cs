@@ -1,14 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using MainGameplay;
+using PongMainGameplay;
 using UnityEngine;
 
 [RequireComponent(typeof(ModeManager))]
 public class Managers : MonoBehaviour
 {
     static public Managers Instance;
-    static public GameplayManager Gameplay;
     static public ModeManager Mode;
+    static public NetworkController Network;
+    
+    static public GameplayManager Gameplay;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +21,9 @@ public class Managers : MonoBehaviour
             
             Mode = GetComponent<ModeManager>();
             Mode.StartManager();
+            
+            Network = GetComponent<NetworkController>();
+            Network.StartManager();
             
             DontDestroyOnLoad(this);
         }
