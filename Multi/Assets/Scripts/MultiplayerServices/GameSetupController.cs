@@ -4,17 +4,22 @@ using UnityEngine;
 using Photon.Pun;
 using System.IO;
 
-public class GameSetupController : MonoBehaviour
+namespace MultiplayerServices
 {
-    // Start is called before the first frame update
-    void Start()
+    public class GameSetupController : MonoBehaviour
     {
-        CreatePlayer();
+        // Start is called before the first frame update
+        void Start()
+        {
+            CreatePlayer();
+        }
+
+        void CreatePlayer()
+        {
+            Debug.Log("Create Player");
+            Vector3 spawnPos = new Vector3(Random.value, Random.value, 0) * 4;
+            PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PhotonPlayer"), spawnPos, Quaternion.identity);
+        }
     }
 
-    void CreatePlayer()
-    {
-        Debug.Log("Create Player");
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PhotonPlayer"), Vector3.zero, Quaternion.identity);
-    }
 }

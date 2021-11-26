@@ -1,19 +1,21 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
-    - GameSetupController
+    - CustomRoomButton
+    - DelaystartWaitingRoomController
     - MainMainMenu
     - Managers
     - ModeManager
-    - NetworkController
+    - MultiplayerServices.GameSetupController
+    - MultiplayerServices.LobbyController
+    - MultiplayerServices.NetworkController
+    - MultiplayerServices.RoomController
     - PongMainGameplay.BallHandler
     - PongMainGameplay.GameplayManager
     - PongMenu.MainMenu
     - PongPlayerPaddles.Endzone
     - PongPlayerPaddles.PaddleHandler
     - PongPlayerPaddles.Player
-    - QuickstartLobbyController
-    - QuickstartRoomController
     PhotonUnityNetworking.Demos.dll:
     - Photon.Pun.Demo.Asteroids.Asteroid
     - Photon.Pun.Demo.Asteroids.Bullet
@@ -74,6 +76,7 @@ ScriptsOnlyBuild:
     - Packages.Rider.Editor.UnitTesting.CallbackData
     Unity.TextMeshPro.dll:
     - TMPro.TMP_FontAsset
+    - TMPro.TMP_InputField
     - TMPro.TMP_Settings
     - TMPro.TMP_SpriteAsset
     - TMPro.TMP_StyleSheet
@@ -99,6 +102,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.Image
     - UnityEngine.UI.LayoutElement
     - UnityEngine.UI.Mask
+    - UnityEngine.UI.RectMask2D
     - UnityEngine.UI.ScrollRect
     - UnityEngine.UI.Scrollbar
     - UnityEngine.UI.Shadow
@@ -107,6 +111,65 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.Toggle
     - UnityEngine.UI.VerticalLayoutGroup
   sceneClasses:
+    Assets/Scenes/DelayStartLobby.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 11408}
+    - Class: 114
+      Script: {instanceID: 11416}
+    - Class: 114
+      Script: {instanceID: 11422}
+    - Class: 114
+      Script: {instanceID: 11908}
+    - Class: 114
+      Script: {instanceID: 12126}
+    - Class: 114
+      Script: {instanceID: 12454}
+    - Class: 114
+      Script: {instanceID: 12694}
+    - Class: 114
+      Script: {instanceID: 13948}
+    - Class: 114
+      Script: {instanceID: 13952}
+    - Class: 114
+      Script: {instanceID: 14374}
+    - Class: 114
+      Script: {instanceID: 15300}
+    - Class: 114
+      Script: {instanceID: 24074}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
     Assets/Scenes/MainMenu.unity:
     - Class: 1
       Script: {instanceID: 0}
@@ -189,7 +252,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11948}
     - Class: 114
+      Script: {instanceID: 11950}
+    - Class: 114
       Script: {instanceID: 12126}
+    - Class: 114
+      Script: {instanceID: 12306}
     - Class: 114
       Script: {instanceID: 12454}
     - Class: 114
@@ -292,6 +359,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 15446}
     - Class: 114
       Script: {instanceID: 15452}
+    - Class: 114
+      Script: {instanceID: 34398}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -610,7 +679,7 @@ ScriptsOnlyBuild:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
-    namespaceName: 
+    namespaceName: MultiplayerServices
     className: GameSetupController
   - hash:
       serializedVersion: 2
@@ -812,10 +881,10 @@ ScriptsOnlyBuild:
     className: TouchInputModule
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+      Hash: bdc806df2bd96956bc6a4ff0bf807be7
     assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: QuickstartRoomController
+    namespaceName: MultiplayerServices
+    className: RoomController
   - hash:
       serializedVersion: 2
       Hash: 60fb902c3bfc0533f4e7b79e5d161e78
@@ -1304,10 +1373,10 @@ ScriptsOnlyBuild:
     className: ChatAppIdCheckerUI
   - hash:
       serializedVersion: 2
-      Hash: 1976a09e5c2161453ec4935664bfd36e
+      Hash: 94eff2748a02af5f1681468d3f59c955
     assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: QuickstartLobbyController
+    namespaceName: MultiplayerServices
+    className: LobbyController
   - hash:
       serializedVersion: 2
       Hash: c656dcc13ae391b68d594cc8f9c590b0
@@ -1582,7 +1651,7 @@ ScriptsOnlyBuild:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
-    namespaceName: 
+    namespaceName: MultiplayerServices
     className: NetworkController
   - hash:
       serializedVersion: 2
@@ -2298,10 +2367,23 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 3e977f677049c3ec12b1e47dfc0a20f3
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: DelaystartWaitingRoomController
+  - hash:
+      serializedVersion: 2
+      Hash: 1834093af0d25a1ee527a8b126cddc1b
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: CustomRoomButton
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity
   - Assets/Scenes/PongMenu.unity
   - Assets/Scenes/PongGameplay.unity
   - Assets/Scenes/NetworkTestQuickstart.unity
+  - Assets/Scenes/DelayStartLobby.unity
   playerPath: E:/Repos/Multi/Build/PongTest.exe

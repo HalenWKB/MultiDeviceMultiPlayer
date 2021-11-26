@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/NetworkTestQuickstart.unity
     guid: 965bc383aeef48f4dac9ef65b517db07
+  - enabled: 1
+    path: Assets/Scenes/DelayStartLobby.unity
+    guid: 28bc2889b5a5b9f41a6c2720873d8aed
   m_configObjects: {}

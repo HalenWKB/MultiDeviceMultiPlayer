@@ -3,22 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class NetworkController : MonoBehaviourPunCallbacks
+namespace MultiplayerServices
 {
-    // Start is called before the first frame update
-    public void StartManager()
+    public class NetworkController : MonoBehaviourPunCallbacks
     {
-        PhotonNetwork.ConnectUsingSettings();
-    }
+        // Start is called before the first frame update
+        public void StartManager()
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
 
-    public override void OnConnectedToMaster()
-    {
-        Debug.Log("We have connected to " + PhotonNetwork.CloudRegion);
-    }
-    
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public override void OnConnectedToMaster()
+        {
+            Debug.Log("We have connected to " + PhotonNetwork.CloudRegion);
+        }
     }
 }
