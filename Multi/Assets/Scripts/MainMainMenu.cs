@@ -6,7 +6,13 @@ using UnityEngine.SceneManagement;
 public class MainMainMenu : MonoBehaviour
 {
     [SerializeField] private GameObject m_mainMenuItems = null;
-    [SerializeField] private GameObject m_networkTestItems = null;
+    [SerializeField] private GameObject m_multiPlayerItems = null;
+    [SerializeField] private GameObject m_singlePlayerItems = null;
+
+    void Start()
+    {
+        OpenPanel(MainMenuPanels.Main);
+    }
     
     public void Quit()
     {
@@ -17,16 +23,23 @@ public class MainMainMenu : MonoBehaviour
     {
         Managers.Scene.RegularSceneChange(SceneCode.PongMenu);
     }
-    
-    public void NetworkTest()
+
+    enum MainMenuPanels
     {
-        m_mainMenuItems.SetActive(false);
-        m_networkTestItems.SetActive(true);
+        Main,
+        SinglePlayer,
+        MultiPlayer
+    }
+
+    void OpenPanel(MainMenuPanels panel)
+    {
+        m_singlePlayerItems.SetActive(panel == MainMenuPanels.SinglePlayer);
+        m_mainMenuItems.SetActive(panel == MainMenuPanels.Main);
+        m_multiPlayerItems.SetActive(panel == MainMenuPanels.MultiPlayer);
     }
     
-    public void BackToMain()
-    {
-        m_mainMenuItems.SetActive(true);
-        m_networkTestItems.SetActive(false);
-    }
+    public void SinglePlayer() { OpenPanel(MainMenuPanels.SinglePlayer); }
+    public void MultiPlayer() { OpenPanel(MainMenuPanels.MultiPlayer); }
+    
+    public void BackToMain() { OpenPanel(MainMenuPanels.Main); }
 }
