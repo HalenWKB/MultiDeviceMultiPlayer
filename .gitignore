@@ -6,7 +6,7 @@
 # They also could contain extremely sensitive data
 # This .gitignore file should be placed at the root of your Unity project directory
 #
-[Ll]ibrary/*
+Multi/[Ll]ibrary/*
 **/[Ll]ibrary/[Aa]rtifacts/
 **/[Tt]emp/
 **/[Oo]bj/
