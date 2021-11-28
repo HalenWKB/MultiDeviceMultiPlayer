@@ -13,12 +13,12 @@ namespace PongMenu
 
         public void Quit()
         {
-            SceneManager.LoadScene(0);
+            Managers.Scene.RegularSceneChange(SceneCode.MainMenu);
         }
         void PlayGame(GameMode mode)
         {
             Managers.Mode.SetGameMode(mode);
-            SceneManager.LoadScene(2);
+            Managers.Scene.RegularSceneChange(SceneCode.PongGameplay);
         }
     }
 }

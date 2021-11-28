@@ -10,6 +10,7 @@ public class Managers : MonoBehaviour
     static public Managers Instance;
     static public ModeManager Mode;
     static public NetworkController Network;
+    static public SceneTransitManager Scene;
     
     static public GameplayManager Gameplay;
 
@@ -25,6 +26,9 @@ public class Managers : MonoBehaviour
             
             Network = GetComponent<NetworkController>();
             Network.StartManager();
+
+            Scene = GetComponent<SceneTransitManager>();
+            Scene.StartManager();
             
             DontDestroyOnLoad(this);
         }

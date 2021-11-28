@@ -100,7 +100,7 @@ namespace PongMainGameplay
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                SceneManager.LoadScene(1);
+                Managers.Scene.RegularSceneChange(SceneCode.PongMenu);
             }
         }
     }

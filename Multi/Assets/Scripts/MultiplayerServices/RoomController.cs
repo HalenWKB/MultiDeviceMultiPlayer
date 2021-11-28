@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 namespace MultiplayerServices
 {
@@ -107,7 +108,7 @@ namespace MultiplayerServices
             if (PhotonNetwork.IsMasterClient)
             {
                 Debug.Log("Master starting game");
-                PhotonNetwork.LoadLevel(3);
+                Managers.Scene.NetworkSceneChange(SceneCode.NetworkTest);
             }
         }
         
@@ -121,7 +122,7 @@ namespace MultiplayerServices
             if (PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;
-                PhotonNetwork.LoadLevel(3);
+                Managers.Scene.NetworkSceneChange(SceneCode.NetworkTest);
             }
         }
 

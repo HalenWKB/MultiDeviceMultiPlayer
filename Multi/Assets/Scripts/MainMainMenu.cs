@@ -15,7 +15,7 @@ public class MainMainMenu : MonoBehaviour
     
     public void Pong()
     {
-        SceneManager.LoadScene(1);
+        Managers.Scene.RegularSceneChange(SceneCode.PongMenu);
     }
     
     public void NetworkTest()
