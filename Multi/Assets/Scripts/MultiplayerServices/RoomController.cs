@@ -38,7 +38,7 @@ namespace MultiplayerServices
             }
         }
 
-        void ListPlayers()
+        void ListPlayersAndUpdateCommands()
         {
             ClearPlayerListings();
             
@@ -46,6 +46,11 @@ namespace MultiplayerServices
                                                      + " / " + PhotonNetwork.CurrentRoom.MaxPlayers;
             m_needPlayersPrompt.text = "Need players! (Min " 
                                        + m_roomGameType.minPlayerCount.ToString("F0")  + ")";
+            
+            bool needPlayers = PhotonNetwork.PlayerList.Length < m_roomGameType.minPlayerCount;
+            m_startButton.SetActive(PhotonNetwork.IsMasterClient && !needPlayers);
+            m_awaitingMasterPrompt.gameObject.SetActive(!PhotonNetwork.IsMasterClient && !needPlayers);
+            m_needPlayersPrompt.gameObject.SetActive(needPlayers);
             
             for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
             {
@@ -77,26 +82,17 @@ namespace MultiplayerServices
             m_roomGameType = Managers.Network.GetGameTypeDetailsFromPrefixedRoomName(PhotonNetwork.CurrentRoom.Name);
             m_roomTypeDisplay.text = "Game = " + m_roomGameType.displayName;
             
-            bool needPlayers = PhotonNetwork.PlayerList.Length < m_roomGameType.minPlayerCount;
-            m_startButton.SetActive(PhotonNetwork.IsMasterClient && !needPlayers);
-            m_awaitingMasterPrompt.gameObject.SetActive(!PhotonNetwork.IsMasterClient && !needPlayers);
-            m_needPlayersPrompt.gameObject.SetActive(needPlayers);
-                
-            ListPlayers();
+            ListPlayersAndUpdateCommands();
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
-            ListPlayers();
+            ListPlayersAndUpdateCommands();
         }
         
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
-            ListPlayers();
-            if (PhotonNetwork.IsMasterClient)
-            {
-                m_startButton.SetActive(true);
-            }
+            ListPlayersAndUpdateCommands();
         }
         
         public void StartGame()
