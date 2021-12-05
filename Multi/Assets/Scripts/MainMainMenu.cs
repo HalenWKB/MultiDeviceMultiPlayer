@@ -18,6 +18,11 @@ public class MainMainMenu : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void PlaySinglePlayerGame(GameTypeDetails gameType)
+    {
+        Managers.Scene.RegularSceneChange(gameType.singlePlayerLoadScene);
+    }
     
     public void Pong()
     {

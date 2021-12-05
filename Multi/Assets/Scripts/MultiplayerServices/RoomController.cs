@@ -13,30 +13,47 @@ namespace MultiplayerServices
     {
         [SerializeField] private LobbyController m_lobbyController = null;
 
-        [SerializeField] private GameObject m_customLobbyPanel = null;
-        [SerializeField] private GameObject m_customRoomPanel = null;
+        [SerializeField] private GameObject m_lobbyPanel = null;
+        [SerializeField] private GameObject m_roomPanel = null;
         
-        [SerializeField] private GameObject m_customStartButton = null;
+        [SerializeField] private GameObject m_startButton = null;
+        [SerializeField] private TextMeshProUGUI m_needPlayersPrompt = null;
+        [SerializeField] private TextMeshProUGUI m_awaitingMasterPrompt = null;
         
-        [SerializeField] private Transform m_customPlayersContainer = null;
-        [SerializeField] private GameObject m_customPlayerListingPrefab = null;
+        [SerializeField] private Transform m_playersContainer = null;
+        [SerializeField] private GameObject m_playerListingPrefab = null;
 
-        [SerializeField] private TextMeshProUGUI m_customRoomNameDisplay = null;
+        [SerializeField] private TextMeshProUGUI m_roomNameDisplay = null;
+        
+        [SerializeField] private TextMeshProUGUI m_roomTypeDisplay = null;
+        [SerializeField] private TextMeshProUGUI m_roomPlayersDisplay = null;
 
+        private GameTypeDetails m_roomGameType;
+        
         void ClearPlayerListings()
         {
-            for (int i = m_customPlayersContainer.childCount - 1; i >= 0; i--)
+            for (int i = m_playersContainer.childCount - 1; i >= 0; i--)
             {
-                Destroy(m_customPlayersContainer.GetChild(i).gameObject);
+                Destroy(m_playersContainer.GetChild(i).gameObject);
             }
         }
 
         void ListPlayers()
         {
+            ClearPlayerListings();
+            
+            m_roomPlayersDisplay.text = "Players " + PhotonNetwork.PlayerList.Length.ToString("F0") 
+                                                     + " / " + PhotonNetwork.CurrentRoom.MaxPlayers;
+            m_needPlayersPrompt.text = "Need players! (Min " 
+                                       + m_roomGameType.minPlayerCount.ToString("F0")  + ")";
+            
             for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
             {
                 Player player = PhotonNetwork.PlayerList[i];
-                GameObject tempListing = Instantiate(m_customPlayerListingPrefab, m_customPlayersContainer);
+                if (i == 0)
+                    m_awaitingMasterPrompt.text = "Awaiting " + player.NickName + "...";
+                
+                GameObject tempListing = Instantiate(m_playerListingPrefab, m_playersContainer);
                 TextMeshProUGUI tempText = tempListing.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
                 tempText.text = player.NickName;
             }
@@ -54,75 +71,40 @@ namespace MultiplayerServices
 
         public override void OnJoinedRoom()
         {
-            Debug.Log("Joined room");
-            switch (m_lobbyController.GetLobbyMode())
-            {
-                case LobbyMode.Quickstart:
-                    QuickStartGame();
-                    return;
-                case LobbyMode.Delaystart:
-                    DelayStartGame();
-                    return;
-                case LobbyMode.Custom:
-                    CustomJoinedRoom();
-                    return;
-            }
-        }
-
-        void CustomJoinedRoom()
-        {
-            m_customRoomPanel.SetActive(true);
-            m_customLobbyPanel.SetActive(false);
-            m_customRoomNameDisplay.text = PhotonNetwork.CurrentRoom.Name;
-            if (PhotonNetwork.IsMasterClient)
-            {
-                m_customStartButton.SetActive(true);
-            }
-            else
-            {
-                m_customStartButton.SetActive(false);
-            }
+            m_roomPanel.SetActive(true);
+            m_lobbyPanel.SetActive(false);
+            m_roomNameDisplay.text = Managers.Network.RemovePrefixFromRoomName(PhotonNetwork.CurrentRoom.Name);
+            m_roomGameType = Managers.Network.GetGameTypeDetailsFromPrefixedRoomName(PhotonNetwork.CurrentRoom.Name);
+            m_roomTypeDisplay.text = "Game = " + m_roomGameType.displayName;
             
-            ClearPlayerListings();
+            bool needPlayers = PhotonNetwork.PlayerList.Length < m_roomGameType.minPlayerCount;
+            m_startButton.SetActive(PhotonNetwork.IsMasterClient && !needPlayers);
+            m_awaitingMasterPrompt.gameObject.SetActive(!PhotonNetwork.IsMasterClient && !needPlayers);
+            m_needPlayersPrompt.gameObject.SetActive(needPlayers);
+                
             ListPlayers();
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
-            ClearPlayerListings();
             ListPlayers();
         }
         
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
-            ClearPlayerListings();
             ListPlayers();
             if (PhotonNetwork.IsMasterClient)
             {
-                m_customStartButton.SetActive(true);
+                m_startButton.SetActive(true);
             }
         }
         
-        void QuickStartGame()
-        {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                Debug.Log("Master starting game");
-                Managers.Scene.NetworkSceneChange(SceneCode.NetworkTest);
-            }
-        }
-        
-        void DelayStartGame()
-        {
-            PhotonNetwork.LoadLevel(4);
-        }
-        
-        public void CustomStartGame()
+        public void StartGame()
         {
             if (PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;
-                Managers.Scene.NetworkSceneChange(SceneCode.NetworkTest);
+                Managers.Scene.NetworkSceneChange(m_roomGameType.multiPlayerLoadScene);
             }
         }
 
@@ -134,11 +116,11 @@ namespace MultiplayerServices
 
         public void BackOnClick()
         {
-            m_customLobbyPanel.SetActive(true);
-            m_customRoomPanel.SetActive(false);
+            m_lobbyPanel.SetActive(true);
+            m_roomPanel.SetActive(false);
             PhotonNetwork.LeaveRoom();
             PhotonNetwork.LeaveLobby();
-            m_lobbyController.ReturningFromCustomRoom();
+            m_lobbyController.LeaveRoom();
             StartCoroutine(RejoinLobby());
         }
     }

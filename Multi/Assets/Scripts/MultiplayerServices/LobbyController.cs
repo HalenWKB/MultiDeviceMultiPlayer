@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,6 +7,7 @@ using Photon.Pun;
 using Photon.Pun.Demo.Cockpit.Forms;
 using Photon.Realtime;
 using TMPro;
+using Random = UnityEngine.Random;
 
 namespace MultiplayerServices
 {
@@ -19,41 +21,39 @@ namespace MultiplayerServices
     public class LobbyController : MonoBehaviourPunCallbacks
     {
         [SerializeField] private GameObject m_connectingToServerMessage = null;
-        [SerializeField] private GameObject m_networkTestButtons = null;
-        [SerializeField] private GameObject m_loadingButtons = null;
+        [SerializeField] private GameObject m_networkOptionsContent = null;
         
-        [SerializeField] private GameObject m_customGameContent = null;
-        [SerializeField] private GameObject m_customLobby = null;
-        [SerializeField] private GameObject m_customLogin = null;
+        [SerializeField] private GameObject m_multiplayerLobby = null;
+        [SerializeField] private GameObject m_multiplayerLogin = null;
         
         [SerializeField] private TMP_InputField m_customPlayerName = null;
         
         [SerializeField] private Transform m_customRoomsContainer = null;
         [SerializeField] private GameObject m_customRoomListingPrefab = null;
         
-        [SerializeField] private int m_roomSize = 4;
-
         [SerializeField] private MainMainMenu m_mainMainMenu = null;
 
+        [SerializeField] private TextMeshProUGUI m_roomSizePrompt = null;
+        
+        [SerializeField] private GameObject m_roomSizeInput = null;
+        [SerializeField] private GameObject m_roomSizeLocked = null;
 
-        private string m_customRoomName;
-        private int m_customRoomSize;
+        private string m_roomName;
+        private GameTypeDetails m_roomType;
+        private int m_roomSize;
+        private int m_roomSizeLockedOverrride;
+        private GameObject m_lastRoomTypeHighlight;
+        
         private List<RoomInfo> m_roomListings;
-        
-        private LobbyMode m_lobbyMode = LobbyMode.Quickstart;
 
-        private bool m_inCustomMatchmaking;
-        
-        public LobbyMode GetLobbyMode()
-        {
-            return m_lobbyMode;
-        }
+        private bool m_returningFromRoom;
 
         void Start()
         {
             m_connectingToServerMessage.SetActive(!PhotonNetwork.IsConnected);
-            m_networkTestButtons.SetActive(PhotonNetwork.IsConnected);
-            m_loadingButtons.SetActive(false);
+            m_networkOptionsContent.SetActive(PhotonNetwork.IsConnected);
+            m_multiplayerLogin.SetActive(true);
+            m_multiplayerLobby.SetActive(false);
             m_roomListings = new List<RoomInfo>();
         }
 
@@ -65,41 +65,49 @@ namespace MultiplayerServices
 
         public override void OnConnectedToMaster()
         {
-            PhotonNetwork.AutomaticallySyncScene = true;
             m_connectingToServerMessage.SetActive(false);
-            m_networkTestButtons.SetActive(!m_inCustomMatchmaking);
-            m_customGameContent.SetActive(m_inCustomMatchmaking);
+            m_networkOptionsContent.SetActive(true);
 
-            string nickName = "";
-            if (PlayerPrefs.HasKey("NickName"))
-                nickName = PlayerPrefs.GetString("NickName");
-            
-            if (nickName == "")
-                PhotonNetwork.NickName = "Player " + Random.Range(0, 1000);
+            if (m_returningFromRoom)
+            {
+                m_returningFromRoom = false;
+                EnterMainLobby();
+            }
             else
-                PhotonNetwork.NickName = nickName;
+            {
+                PhotonNetwork.AutomaticallySyncScene = true;
+                string nickName = "";
+                if (PlayerPrefs.HasKey("NickName"))
+                    nickName = PlayerPrefs.GetString("NickName");
+            
+                if (nickName == "")
+                    PhotonNetwork.NickName = "Player " + Random.Range(0, 1000);
+                else
+                    PhotonNetwork.NickName = nickName;
 
-            m_customPlayerName.text = PhotonNetwork.NickName;
+                m_customPlayerName.text = PhotonNetwork.NickName;
+                
+                
+            }
         }
 
-        public void CustomPlayerNameUpdate(string nameInput)
+        public void PlayerNameUpdate(string nameInput)
         {
-            Debug.Log("Name set to: " + nameInput);
             PhotonNetwork.NickName = nameInput;
             PlayerPrefs.SetString("NickName",nameInput);
         }
 
-        public void CustomJoinLobbyOnClick()
+        public void EnterMainLobby()
         {
-            m_customLogin.SetActive(false);
-            m_customLobby.SetActive(true);
+            m_multiplayerLogin.SetActive(false);
+            m_multiplayerLobby.SetActive(true);
             PhotonNetwork.JoinLobby();
         }
         
 
         public override void OnRoomListUpdate(List<RoomInfo> roomList)
         {
-            Debug.Log("Room list update!");
+            //Debug.Log("Room list update!");
             int tempIdx;
             for (int i = 0; i < roomList.Count; i++)
             {
@@ -135,101 +143,70 @@ namespace MultiplayerServices
 
         public void OnRoomNameChanged(string nameIn)
         {
-            Debug.Log("Room name set to: " + nameIn);
-            m_customRoomName = nameIn;
+            m_roomName = nameIn;
         }
 
         public void OnRoomSizeChanged(string sizeIn)
         {
             int size = int.Parse(sizeIn);
-            Debug.Log("Room size set to: " + size);
-            m_customRoomSize = size;
-        }
-        
-        public void QuickStart()
-        {
-            m_lobbyMode = LobbyMode.Quickstart;
-            LobbyStart();
+            m_roomSize = size;
         }
 
-        public void DelayStart()
+        public void OnRoomTypeSelected(GameTypeDetails gameType, GameObject childHighlight)
         {
-            m_lobbyMode = LobbyMode.Delaystart;
-            LobbyStart();
+            //Debug.Log("RoomType");
+            m_roomType = gameType;
+            if (m_lastRoomTypeHighlight != null)
+                m_lastRoomTypeHighlight.SetActive(false);
+            m_lastRoomTypeHighlight = childHighlight;
+            m_lastRoomTypeHighlight.SetActive(true);
+            if (gameType.minPlayerCount != gameType.maxPlayerCount)
+            {
+                m_roomSizePrompt.text = "Room Size (" + gameType.minPlayerCount.ToString("F0") 
+                                                      + "-" + gameType.maxPlayerCount.ToString("F0")  + "):";
+                m_roomSizeLocked.SetActive(false);
+                m_roomSizeInput.SetActive(true);
+                
+                m_roomSizeLockedOverrride = -1;
+            }
+            else
+            {
+                m_roomSizePrompt.text = "Room Size:";
+                m_roomSizeLocked.SetActive(true);
+                m_roomSizeInput.SetActive(false);
+
+                m_roomSizeLockedOverrride = gameType.minPlayerCount;
+            }
         }
 
-        public void Custom()
+        public void OpenMultiplayerLogin()
         {
-            m_lobbyMode = LobbyMode.Custom;
-            m_inCustomMatchmaking = true;
-            m_customGameContent.SetActive(true);
-            m_networkTestButtons.SetActive(false);
-            
-            m_customLogin.SetActive(true);
-            m_customLobby.SetActive(false);
+            m_multiplayerLogin.SetActive(true);
+            m_multiplayerLobby.SetActive(false);
         }
 
-        void LobbyStart()
+        public void CreateRoom()
         {
-            m_networkTestButtons.SetActive(false);
-            m_loadingButtons.SetActive(true);
-            PhotonNetwork.JoinRandomRoom();
-            Debug.Log("Quick start pressed");
-        }
-
-        public override void OnJoinRandomFailed(short returnCode, string message)
-        {
-            Debug.Log("Failed to join a room");
-            AutoCreateRoom();
-        }
-        
-        public void CustomCreateRoom()
-        {
-            RoomOptions roomOps = new RoomOptions() {IsVisible = true, IsOpen = true, MaxPlayers = (byte) m_customRoomSize};
-            PhotonNetwork.CreateRoom(m_customRoomName, roomOps);
-            Debug.Log("Creating room: " + m_customRoomName);
-        }
-
-        void AutoCreateRoom()
-        {
-            RoomOptions roomOps = new RoomOptions() {IsVisible = true, IsOpen = true, MaxPlayers = (byte) m_roomSize};
-            int randomRoomNumber = Random.Range(0, 1000);
-            string roomName = "Room" + randomRoomNumber;
+            int roomSize = m_roomSizeLockedOverrride >= 0 ? m_roomSizeLockedOverrride : m_roomSize;
+            string roomName = Managers.Network.GetPrefixedRoomNameFromDetails(m_roomType, m_roomName);
+            RoomOptions roomOps = new RoomOptions() {IsVisible = true, IsOpen = true, MaxPlayers = (byte) roomSize};
             PhotonNetwork.CreateRoom(roomName, roomOps);
             Debug.Log("Creating room: " + roomName);
         }
 
-        public override void OnCreateRoomFailed(short returnCode, string message)
+        public void LeaveRoomListLobby()
         {
-            Debug.Log("Failed to create room...");
-            if (m_lobbyMode != LobbyMode.Custom) AutoCreateRoom();
-        }
-
-        public void QuickCancel()
-        {
-            m_loadingButtons.SetActive(false);
-            m_networkTestButtons.SetActive(true);
-            PhotonNetwork.LeaveRoom();
-        }
-
-        public void LeaveCustomMainLobby()
-        {
-            m_customLobby.SetActive(false);
-            m_customLogin.SetActive(true);
+            m_multiplayerLobby.SetActive(false);
+            m_multiplayerLogin.SetActive(true);
             PhotonNetwork.LeaveLobby();
         }
-        
-        public void ExitCustom()
-        {
-            m_customGameContent.SetActive(false);
-            m_networkTestButtons.SetActive(true);
-            m_inCustomMatchmaking = false;
-        }
 
-        public void ReturningFromCustomRoom()
+        public void LeaveRoom()
         {
+            m_returningFromRoom = true;
+            
             m_connectingToServerMessage.SetActive(true);
-            m_customGameContent.SetActive(false);
+            m_networkOptionsContent.SetActive(false);
         }
     }
 }

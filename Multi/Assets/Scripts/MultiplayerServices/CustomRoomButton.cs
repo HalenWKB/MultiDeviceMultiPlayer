@@ -23,7 +23,9 @@ public class CustomRoomButton : MonoBehaviour
         m_roomName = nameInput;
         m_roomSize = sizeInput;
         m_playerCount = countInput;
-        m_nameText.text = nameInput;
+
+        m_nameText.text = Managers.Network.GetGameTypeDetailsFromPrefixedRoomName(nameInput).displayName 
+                          + " - " + Managers.Network.RemovePrefixFromRoomName(nameInput);
         m_sizeText.text = countInput + "/" + sizeInput;
     }
 }
