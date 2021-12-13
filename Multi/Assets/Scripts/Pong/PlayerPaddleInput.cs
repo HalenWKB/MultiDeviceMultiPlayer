@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 
@@ -10,7 +11,7 @@ namespace PongPlayerPaddles
     {
         private KeyCode m_leftKey = KeyCode.W;
         private KeyCode m_rightKey = KeyCode.S;
-
+        
         public void SetKeys(KeyCode leftKey, KeyCode rightKey)
         {
             m_leftKey = leftKey;

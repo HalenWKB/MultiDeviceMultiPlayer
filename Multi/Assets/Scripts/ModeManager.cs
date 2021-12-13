@@ -5,13 +5,17 @@ using UnityEngine;
 
 public enum GameMode
 {
-    PvP,
-    PvE,
-    EvE
+    PONG_SP_PvP,
+    PONG_SP_PvE,
+    PONG_SP_EvE,
+    PONG_MP_PvP,
+    PONG_SP_Menu,
+    
+    TEST
 }
 public class ModeManager : MonoBehaviour
 {
-    [SerializeField] private GameMode m_defaultMode = GameMode.PvE;
+    [SerializeField] private GameMode m_defaultMode = GameMode.PONG_SP_PvE;
     
     private GameMode m_currentGameMode;
 

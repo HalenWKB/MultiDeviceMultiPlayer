@@ -17,13 +17,17 @@ MonoBehaviour:
     prefixCode: TE
     active: 1
     singlePlayerLoadScene: 3
+    singlePlayerGameMode: 5
     multiPlayerLoadScene: 3
+    MultiPlayerLGameMode: 5
     minPlayerCount: 1
     maxPlayerCount: 99
   - displayName: Pong
     prefixCode: PO
     active: 1
     singlePlayerLoadScene: 1
+    singlePlayerGameMode: 4
     multiPlayerLoadScene: 2
+    MultiPlayerLGameMode: 3
     minPlayerCount: 2
     maxPlayerCount: 2

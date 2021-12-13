@@ -7,9 +7,9 @@ namespace PongMenu
 {
     public class MainMenu : MonoBehaviour
     {
-        public void PlayPvP() { PlayGame(GameMode.PvP); }
-        public void PlayPvE() { PlayGame(GameMode.PvE); }
-        public void PlayEvE() { PlayGame(GameMode.EvE); }
+        public void PlayPvP() { PlayGame(GameMode.PONG_SP_PvP); }
+        public void PlayPvE() { PlayGame(GameMode.PONG_SP_PvE); }
+        public void PlayEvE() { PlayGame(GameMode.PONG_SP_EvE); }
 
         public void Quit()
         {

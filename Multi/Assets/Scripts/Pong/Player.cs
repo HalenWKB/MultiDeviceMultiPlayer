@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
+using PongMainGameplay;
 using TMPro;
 using UnityEngine;
 
@@ -29,7 +31,15 @@ namespace PongPlayerPaddles
         [SerializeField] private float m_aiReactionTimeMax = 0.02f;
 
         [SerializeField] private float m_aiReadInaccuracy = 1f;
-    
+        
+        [Header("Multiplayer Input Settings")]
+        [SerializeField] private PhotonView m_photonView = null;
+
+        public bool IsLocalPlayer()
+        {
+            return m_photonView.IsMine;
+        }
+        
         public void GivePoint()
         {
             m_score++;
@@ -40,7 +50,28 @@ namespace PongPlayerPaddles
         {
             return m_score;
         }
-    
+
+        public void RelinkScoreDisplay(TextMeshProUGUI scoreDisplay)
+        {
+            m_scoreDisplay = scoreDisplay;
+        }
+        
+        public DelinkedScoreDisplay GetScoreDisplay()
+        {
+            DelinkedScoreDisplay result = new DelinkedScoreDisplay();
+            result.scoreDiplayer = m_scoreDisplay;
+            result.masterLastPos = transform.position;
+            return result;
+        }
+        
+        public void SetupMultiplayerPlayer(Player baseOnPlayer, string name, bool flipInputs)
+        {
+            MultiplayerPaddleInput humanInput = m_paddle.gameObject.AddComponent<MultiplayerPaddleInput>();
+            m_name = name;
+            m_scoreDisplay = baseOnPlayer.m_scoreDisplay;
+            humanInput.SetView(m_photonView, flipInputs);
+        }
+        
         public void SetInputMode_HumanOrAI(bool humanPlayer)
         {
             if (humanPlayer)

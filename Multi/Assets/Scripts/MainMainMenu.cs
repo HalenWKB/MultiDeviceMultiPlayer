@@ -21,6 +21,7 @@ public class MainMainMenu : MonoBehaviour
 
     public void PlaySinglePlayerGame(GameTypeDetails gameType)
     {
+        Managers.Mode.SetGameMode(gameType.singlePlayerGameMode);
         Managers.Scene.RegularSceneChange(gameType.singlePlayerLoadScene);
     }
     

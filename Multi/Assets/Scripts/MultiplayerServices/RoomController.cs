@@ -82,6 +82,8 @@ namespace MultiplayerServices
             m_roomGameType = Managers.Network.GetGameTypeDetailsFromPrefixedRoomName(PhotonNetwork.CurrentRoom.Name);
             m_roomTypeDisplay.text = "Game = " + m_roomGameType.displayName;
             
+            Managers.Mode.SetGameMode(m_roomGameType.MultiPlayerLGameMode);
+            
             ListPlayersAndUpdateCommands();
         }
 

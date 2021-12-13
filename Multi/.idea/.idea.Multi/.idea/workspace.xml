@@ -2,7 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0ae0a12c-bdd1-4b11-ad65-99299bc7e271" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Multi/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Multi/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/HumanPlayer.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/HumanPlayer.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/PongGameplay.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/PongGameplay.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GameTypeDict.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameTypeDict.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GameTypeDictionary.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameTypeDictionary.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/MainMainMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/MainMainMenu.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ModeManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ModeManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/MultiplayerServices/RoomController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/MultiplayerServices/RoomController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pong/GameplayManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pong/GameplayManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pong/MainMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pong/MainMenu.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pong/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pong/Player.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pong/PlayerPaddleInput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pong/PlayerPaddleInput.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/QualitySettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/QualitySettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -26,6 +41,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/GameMenuOptionPopulator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/MultiplayerServices/GameSetupController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/MultiplayerServices/DelaystartWaitingRoomController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Pong/MultiplayerPaddleInput.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/GameTypeDictionary.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SceneTransitManager.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -86,7 +102,8 @@
       <workItem from="1637882661193" duration="16896000" />
       <workItem from="1638073320849" duration="4170000" />
       <workItem from="1638659099887" duration="14870000" />
-      <workItem from="1638687631720" duration="113000" />
+      <workItem from="1638687631720" duration="416000" />
+      <workItem from="1639354239782" duration="10856000" />
     </task>
     <servers />
   </component>
@@ -110,5 +127,24 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/MultiplayerServices/RoomController.cs</url>
+          <line>63</line>
+          <properties documentPath="E:\Repos\Multi\MultiDeviceMultiPlayer\Multi\Assets\Scripts\MultiplayerServices\RoomController.cs" initialLine="63" containingFunctionPresentation="method 'ListPlayersAndUpdateCommands'">
+            <startOffsets>
+              <option value="2783" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2784" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

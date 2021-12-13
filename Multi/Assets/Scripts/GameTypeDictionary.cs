@@ -5,6 +5,8 @@ using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
 
+
+
 [Serializable]
 public struct GameTypeDetails
 {
@@ -15,9 +17,11 @@ public struct GameTypeDetails
     
     //Single player stuff
     public SceneCode singlePlayerLoadScene;// = SceneCode.MainMenu;
+    public GameMode singlePlayerGameMode;
     
     //Multiplayer stuff
-    public SceneCode multiPlayerLoadScene;// = SceneCode.MainMenu;
+    public SceneCode multiPlayerLoadScene;
+    public GameMode MultiPlayerLGameMode;// = SceneCode.MainMenu;
     public int minPlayerCount;// = 2;
     public int maxPlayerCount;// = 2;
 }
