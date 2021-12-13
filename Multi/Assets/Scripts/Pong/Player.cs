@@ -75,7 +75,10 @@ namespace PongPlayerPaddles
             MultiplayerPaddleInput humanInput = m_paddle.gameObject.AddComponent<MultiplayerPaddleInput>();
             m_name = name;
             m_scoreDisplay = baseOnPlayer.m_scoreDisplay;
-            humanInput.SetView(m_photonView, flipInputs);
+            humanInput.PaddleStart();
+            humanInput.SetKeys(flipInputs ? m_rightKey : m_leftKey
+                , flipInputs ? m_leftKey : m_rightKey);
+            humanInput.SetView(m_photonView);
         }
         
         public void SetInputMode_HumanOrAI(bool humanPlayer)
@@ -83,6 +86,7 @@ namespace PongPlayerPaddles
             if (humanPlayer)
             {
                 PlayerPaddleInput humanInput = m_paddle.gameObject.AddComponent<PlayerPaddleInput>();
+                humanInput.PaddleStart();
                 humanInput.SetKeys(m_leftKey, m_rightKey);
             }
             else

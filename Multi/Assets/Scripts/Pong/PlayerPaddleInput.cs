@@ -9,8 +9,8 @@ namespace PongPlayerPaddles
     [RequireComponent(typeof(PaddleHandler))]
     public class PlayerPaddleInput : MonoBehaviour
     {
-        private KeyCode m_leftKey = KeyCode.W;
-        private KeyCode m_rightKey = KeyCode.S;
+        protected KeyCode m_leftKey = KeyCode.W;
+        protected KeyCode m_rightKey = KeyCode.S;
         
         public void SetKeys(KeyCode leftKey, KeyCode rightKey)
         {
@@ -18,19 +18,26 @@ namespace PongPlayerPaddles
             m_rightKey = rightKey;
         }
 
-        private PaddleHandler m_paddle;
+        protected PaddleHandler m_paddle;
 
-        void Start()
+        public void PaddleStart()
         {
             m_paddle = GetComponent<PaddleHandler>();
         }
 
-        void Update()
+        protected void HandleMovement()
         {
             bool lInput = Input.GetKey(m_leftKey);
             bool rInput = Input.GetKey(m_rightKey);
 
             if ((lInput || rInput) && !(lInput && rInput)) m_paddle.MoveInput(lInput);
+            
+            if (Input.GetKey(KeyCode.LeftShift)) m_paddle.DebugGrowInput();
+        }
+        
+        void Update()
+        {
+            HandleMovement();
         }
     }
 }

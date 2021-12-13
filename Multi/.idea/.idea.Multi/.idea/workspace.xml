@@ -3,11 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="0ae0a12c-bdd1-4b11-ad65-99299bc7e271" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Multi/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Multi/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/MainMainMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/MainMainMenu.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ModeManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ModeManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/MultiplayerServices/LobbyController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/MultiplayerServices/LobbyController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/MultiplayerServices/RoomController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/MultiplayerServices/RoomController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pong/GameplayManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pong/GameplayManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/PhotonPrefabs/PongPlayer.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/PhotonPrefabs/PongPlayer.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pong/MultiplayerPaddleInput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pong/MultiplayerPaddleInput.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pong/PaddleHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pong/PaddleHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pong/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pong/Player.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pong/PlayerPaddleInput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pong/PlayerPaddleInput.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/QualitySettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/QualitySettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,6 +95,7 @@
       <workItem from="1638659099887" duration="14870000" />
       <workItem from="1638687631720" duration="416000" />
       <workItem from="1639354239782" duration="17680000" />
+      <workItem from="1639433772332" duration="1084000" />
     </task>
     <servers />
   </component>

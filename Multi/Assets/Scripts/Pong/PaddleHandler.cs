@@ -12,13 +12,16 @@ namespace PongPlayerPaddles
         [SerializeField] private float m_paddleSkewBallMod = 0.5f;
 
         [SerializeField] private float m_paddleMoveConstraintDist = 5f;
-
+        
+        [SerializeField] private GameObject m_debugPreGrowthIndicator = null;
+        [SerializeField] private float m_debugGrowthSpeed = 1;
 
         private Vector3 m_startPos;
     
         void Start()
         {
             m_startPos = transform.position;
+            m_debugPreGrowthIndicator.SetActive(false);
         }
     
         public void MoveInput(bool isLeftInput)
@@ -31,6 +34,14 @@ namespace PongPlayerPaddles
             leftMoveMod += isLeftInput ? moveModOutOfBoundsBy : -moveModOutOfBoundsBy;
         
             transform.position += transform.up * leftMoveMod;
+            m_debugPreGrowthIndicator.transform.position = new Vector3(transform.position.x,transform.position.y
+                ,m_debugPreGrowthIndicator.transform.position.z);
+        }
+
+        public void DebugGrowInput()
+        {
+            transform.localScale += new Vector3(0, m_debugGrowthSpeed * Time.deltaTime, 0);
+            m_debugPreGrowthIndicator.SetActive(true);
         }
 
 
