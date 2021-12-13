@@ -148,6 +148,8 @@ namespace PongMainGameplay
                 if (!m_recentlyFoundPlayers[i].IsLocalPlayer())
                 {
                     m_players.Add(m_recentlyFoundPlayers[i]);
+                    m_recentlyFoundPlayers[i].RelinkPlayerName();
+                    
                     int closestSDIdx = -1;
                     float closestSDDist = Mathf.Infinity;
                     for (int j = 0; j < m_delinkedScoreDisplays.Count; j++)

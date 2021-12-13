@@ -24,7 +24,8 @@ namespace PongMainGameplay
         
         private Vector3 m_velocity;
         private bool serving;
-    
+        private bool dying = false;
+        
         public void ServeBall(Vector3 direction)
         {
             m_velocity = direction * m_serveSpeed;
@@ -33,7 +34,25 @@ namespace PongMainGameplay
 
         void Update()
         {
-            if (Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP && !PhotonNetwork.IsMasterClient) return;
+            if (Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP && !PhotonNetwork.IsMasterClient)
+            {
+                Collider[] overlapCols = Physics.OverlapBox(transform.position
+                    , transform.localScale / 2, Quaternion.identity);
+                
+
+                for (int i = 0; i < overlapCols.Length; i++)
+                {
+                    Endzone endZoneHit = overlapCols[i].GetComponent<Endzone>();
+
+                    if (endZoneHit != null)
+                    {
+                        HitEndzone(endZoneHit);
+                        return;
+                    }
+                }
+
+                return;
+            }
             bool hitSomething;
             float castDist = m_velocity.magnitude * Time.deltaTime;
             do
@@ -48,9 +67,8 @@ namespace PongMainGameplay
 
                     if (endZoneHit != null)
                     {
-                        endZoneHit.BallHit();
-                        Destroy(gameObject);
-                        return;
+                        HitEndzone(endZoneHit);
+                        break;
                     }
 
                     PaddleHandler paddleHit = hitInfo.collider.GetComponent<PaddleHandler>();
@@ -67,8 +85,27 @@ namespace PongMainGameplay
                 }
             } while (hitSomething);
             
-            
             transform.position += m_velocity * Time.deltaTime;
+        }
+
+        void HitEndzone(Endzone ez)
+        {
+            if (dying) return;
+            ez.BallHit();
+            dying = true;
+            StartCoroutine(DelayedDestroy());
+        }
+        
+        IEnumerator DelayedDestroy()
+        {
+            yield return new WaitForSeconds(1);
+            if (Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP)
+            {
+                if (PhotonNetwork.IsMasterClient)
+                    PhotonNetwork.Destroy(gameObject);
+            }
+            else
+                Destroy(gameObject);
         }
     }
 }

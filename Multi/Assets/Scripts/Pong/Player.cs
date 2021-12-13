@@ -55,6 +55,10 @@ namespace PongPlayerPaddles
         {
             m_scoreDisplay = scoreDisplay;
         }
+        public void RelinkPlayerName()
+        {
+            m_name = m_photonView.Owner.NickName;
+        }
         
         public DelinkedScoreDisplay GetScoreDisplay()
         {
@@ -63,6 +67,8 @@ namespace PongPlayerPaddles
             result.masterLastPos = transform.position;
             return result;
         }
+
+        
         
         public void SetupMultiplayerPlayer(Player baseOnPlayer, string name, bool flipInputs)
         {
