@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using PongPlayerPaddles;
 using UnityEngine;
 
@@ -32,6 +33,7 @@ namespace PongMainGameplay
 
         void Update()
         {
+            if (Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP && !PhotonNetwork.IsMasterClient) return;
             bool hitSomething;
             float castDist = m_velocity.magnitude * Time.deltaTime;
             do

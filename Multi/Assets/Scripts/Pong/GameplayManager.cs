@@ -123,8 +123,14 @@ namespace PongMainGameplay
 
         void SpawnBall()
         {
-            if (m_debugStopBallSpawn) return;
-            m_ball = Instantiate(m_ballPrefab, m_ballSpawn.position, m_ballSpawn.rotation).GetComponent<BallHandler>();
+            bool multiplayerMode = Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP;
+            if (m_debugStopBallSpawn 
+                || (multiplayerMode && !PhotonNetwork.IsMasterClient)) return;
+            if (multiplayerMode)
+                m_ball = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PongBall")
+                    , m_ballSpawn.position, m_ballSpawn.rotation).GetComponent<BallHandler>();
+            else 
+                m_ball = Instantiate(m_ballPrefab, m_ballSpawn.position, m_ballSpawn.rotation).GetComponent<BallHandler>();
             m_ball.ServeBall((m_server.GetPaddlePos() - m_ball.transform.position).normalized);
         }
 
