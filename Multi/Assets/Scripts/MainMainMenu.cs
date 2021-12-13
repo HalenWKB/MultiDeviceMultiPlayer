@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using MultiplayerServices;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,9 +11,21 @@ public class MainMainMenu : MonoBehaviour
     [SerializeField] private GameObject m_multiPlayerItems = null;
     [SerializeField] private GameObject m_singlePlayerItems = null;
 
+    [SerializeField] private LobbyController m_lobbyController = null;
+    [SerializeField] private RoomController m_roomController = null;
+    
     void Start()
     {
-        OpenPanel(MainMenuPanels.Main);
+        if (Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP)
+        {
+            Managers.Mode.SetGameMode(GameMode._MainMenu);
+            OpenPanel(MainMenuPanels.MultiPlayer);
+            m_lobbyController.OpenLobbyContent();
+            if (PhotonNetwork.InRoom)
+                m_roomController.OpenRoomContent();
+        }
+        else
+            OpenPanel(MainMenuPanels.Main);
     }
     
     public void Quit()

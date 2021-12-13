@@ -34,6 +34,9 @@ namespace PongMainGameplay
         private BallHandler m_ball;
         private Player m_server;
         
+        private bool ending = false;
+        private bool starting = true;
+        
         public Vector3 GetBallPos()
         {
             if (m_ball != null)
@@ -47,8 +50,7 @@ namespace PongMainGameplay
             Managers.Instance.GameplaySignIn(this);
             SetPlayersBasedOnGameMode();
             m_server = m_players[0];
-            StartCoroutine( WaitWithTextBeforeAction("Awaiting Players...",WireUpPlayers,0,HaveAllPlayersJoined));
-            StartCoroutine( WaitWithTextBeforeAction("Get Ready!",SpawnBall));
+            StartCoroutine( WaitWithTextBeforeAction("Awaiting Players...",WireUpPlayersAndStart,0,HaveAllPlayersJoined));
         }
 
         void SetPlayersBasedOnGameMode()
@@ -94,6 +96,8 @@ namespace PongMainGameplay
         
         public void SomebodiesEndzoneWasHit(Player paddleHit)
         {
+            if (ending) return;
+            
             string whoScored = "";
             int topScore = 0;
             string leadingPlayer;
@@ -115,14 +119,23 @@ namespace PongMainGameplay
 
             m_server = paddleHit;
 
-            if (topScore >= m_scoreToWin) 
+            
+            if (topScore >= m_scoreToWin)
+            {
+                ending = true;
                 StartCoroutine( WaitWithTextBeforeAction(whoScored + " wins the match!",EndGame, 5));
+            }
             else 
                 StartCoroutine( WaitWithTextBeforeAction(whoScored + " scored a point!",SpawnBall));
         }
 
+        
+        
+
         void SpawnBall()
         {
+            if (ending) return;
+            
             bool multiplayerMode = Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP;
             if (m_debugStopBallSpawn 
                 || (multiplayerMode && !PhotonNetwork.IsMasterClient)) return;
@@ -141,7 +154,7 @@ namespace PongMainGameplay
         }
 
         private Player[] m_recentlyFoundPlayers;
-        void WireUpPlayers()
+        void WireUpPlayersAndStart()
         {
             for (int i = 0; i < m_recentlyFoundPlayers.Length; i++)
             {
@@ -171,11 +184,14 @@ namespace PongMainGameplay
                     }
                 }
             }
+
+            starting = false;
+            StartCoroutine( WaitWithTextBeforeAction("Get Ready!",SpawnBall));
         }
 
         void EndGame()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            HandleLeaveGame(false);
         }
         
         IEnumerator WaitWithTextBeforeAction(string text, UnityAction action, float waitTime = 2, Func<bool> waitUntil = null)
@@ -186,15 +202,38 @@ namespace PongMainGameplay
             {
                 yield return new WaitUntil(waitUntil);
             }
-            m_announcementText.text = "";
+            if (!ending)
+                m_announcementText.text = "";
             action.Invoke();
         }
 
+        void HandleLeaveGame(bool quitEarly)
+        {
+            if (Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP)
+            {
+                if (quitEarly)
+                {
+                    PhotonNetwork.LeaveRoom();
+                    Managers.Scene.RegularSceneChange(SceneCode.MainMenu);
+                }
+                else if (PhotonNetwork.IsMasterClient)
+                    Managers.Scene.NetworkSceneChange(SceneCode.MainMenu);
+            }
+            else
+                Managers.Scene.NetworkSceneChange(SceneCode.PongMenu);
+        }
+        
+        
         void Update()
         {
+            if (Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP && PhotonNetwork.CurrentRoom.PlayerCount < 2 && !ending && !starting)
+            {
+                ending = true;
+                StartCoroutine( WaitWithTextBeforeAction(PhotonNetwork.LocalPlayer.NickName + " wins due to opponent forfeit!",EndGame, 5));
+            }
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Managers.Scene.RegularSceneChange(SceneCode.PongMenu);
+                HandleLeaveGame(true);
             }
         }
     }

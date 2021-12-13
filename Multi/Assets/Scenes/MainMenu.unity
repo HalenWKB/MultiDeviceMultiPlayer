@@ -292,7 +292,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 77.85
+  m_fontSize: 115.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3455,7 +3455,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: 9.012512}
+  m_AnchoredPosition: {x: 0, y: 9.012512}
   m_SizeDelta: {x: -165.20007, y: -126.17499}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1024442780
@@ -4291,6 +4291,8 @@ MonoBehaviour:
   m_mainMenuItems: {fileID: 532994049}
   m_multiPlayerItems: {fileID: 1193952708}
   m_singlePlayerItems: {fileID: 491920820}
+  m_lobbyController: {fileID: 1396045109}
+  m_roomController: {fileID: 1396045108}
 --- !u!4 &1396045111
 Transform:
   m_ObjectHideFlags: 0
@@ -5101,7 +5103,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 19.45
+  m_fontSize: 28.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5215,7 +5217,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 115.2
+  m_fontSize: 162.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

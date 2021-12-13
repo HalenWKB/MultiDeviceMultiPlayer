@@ -76,6 +76,11 @@ namespace MultiplayerServices
 
         public override void OnJoinedRoom()
         {
+            OpenRoomContent();
+        }
+
+        public void OpenRoomContent()
+        {
             m_roomPanel.SetActive(true);
             m_lobbyPanel.SetActive(false);
             m_roomNameDisplay.text = Managers.Network.RemovePrefixFromRoomName(PhotonNetwork.CurrentRoom.Name);

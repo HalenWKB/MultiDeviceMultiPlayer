@@ -11,11 +11,13 @@ public enum GameMode
     PONG_MP_PvP,
     PONG_SP_Menu,
     
-    TEST
+    TEST,
+    
+    _MainMenu
 }
 public class ModeManager : MonoBehaviour
 {
-    [SerializeField] private GameMode m_defaultMode = GameMode.PONG_SP_PvE;
+    [SerializeField] private GameMode m_defaultMode = GameMode._MainMenu;
     
     private GameMode m_currentGameMode;
 

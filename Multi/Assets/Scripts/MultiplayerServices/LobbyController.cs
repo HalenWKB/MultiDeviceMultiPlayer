@@ -99,9 +99,14 @@ namespace MultiplayerServices
 
         public void EnterMainLobby()
         {
+            OpenLobbyContent();
+            PhotonNetwork.JoinLobby();
+        }
+
+        public void OpenLobbyContent()
+        {
             m_multiplayerLogin.SetActive(false);
             m_multiplayerLobby.SetActive(true);
-            PhotonNetwork.JoinLobby();
         }
         
 
