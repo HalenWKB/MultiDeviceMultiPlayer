@@ -6,6 +6,12 @@ using UnityEngine.Serialization;
 
 namespace PongPlayerPaddles
 {
+    public struct PaddleBounceResult
+    {
+        public Vector3 resultingVect;
+        public bool hitFront;
+    }
+    
     public class PaddleHandler : MonoBehaviour
     {
         [SerializeField] private float m_paddleSpeed = 10;
@@ -51,17 +57,25 @@ namespace PongPlayerPaddles
                 transform.position - transform.right, -transform.up) ;
         }
     
-        public Vector3 GetBallBounceVectorFromHit(RaycastHit hit, Vector3 currentVect)
+        public PaddleBounceResult GetBallBounceVectorFromHit(RaycastHit hit, Vector3 currentVect)
         {
+            PaddleBounceResult result = new PaddleBounceResult();
             if (IsBallHittingFrontOfPaddle(hit.normal))
             {
                 Vector3 resultVectOnPaddleNorm = Vector3.Project(-currentVect, hit.normal);
                 resultVectOnPaddleNorm -= transform.up 
                                           * HelperFunctions.HowLeftOfRayIsPoint2D(hit.point, transform.position, -transform.right)
                                           * m_paddleSkewBallMod;
-                return resultVectOnPaddleNorm;
+                result.hitFront = true;
+                result.resultingVect = resultVectOnPaddleNorm;
             }
-            else return HelperFunctions.ReflectVectorOnNormal(currentVect, hit.normal);
+            else
+            {
+                result.hitFront = false;
+                result.resultingVect = HelperFunctions.ReflectVectorOnNormal(currentVect, hit.normal);
+            }
+
+            return result;
         }
     }
 }

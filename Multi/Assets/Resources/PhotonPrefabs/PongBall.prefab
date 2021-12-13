@@ -99,6 +99,7 @@ MonoBehaviour:
   m_speedUpVal: 1.1
   m_startVelo: {x: 0, y: 0, z: 0}
   m_debugUseStartVelo: 0
+  m_photonView: {fileID: 6733852852074082392}
 --- !u!114 &6733852852074082392
 MonoBehaviour:
   m_ObjectHideFlags: 0

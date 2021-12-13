@@ -16,6 +16,8 @@ namespace PongMainGameplay
         [SerializeField] private Vector3 m_startVelo = new Vector3();
         [SerializeField] private bool m_debugUseStartVelo = false;
 
+        [SerializeField] private PhotonView m_photonView = null;
+        
         void Start()
         {
             if (!m_debugUseStartVelo) return;
@@ -34,8 +36,9 @@ namespace PongMainGameplay
 
         void Update()
         {
-            if (Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP && !PhotonNetwork.IsMasterClient)
-            {
+            bool isOnline = Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP;
+            /*if (Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP && !PhotonNetwork.IsMasterClient)
+             {
                 Collider[] overlapCols = Physics.OverlapBox(transform.position
                     , transform.localScale / 2, Quaternion.identity);
                 
@@ -52,11 +55,15 @@ namespace PongMainGameplay
                 }
 
                 return;
-            }
+            }*/
+            if (dying) return;
             bool hitSomething;
+            bool veloChanged = false;
+            bool hitPaddleFront = false;
             float castDist = m_velocity.magnitude * Time.deltaTime;
             do
             {
+                veloChanged = true;
                 RaycastHit hitInfo;
                 hitSomething = Physics.BoxCast(transform.position, transform.localScale / 2, m_velocity
                     , out hitInfo, Quaternion.identity, castDist);
@@ -74,20 +81,52 @@ namespace PongMainGameplay
                     PaddleHandler paddleHit = hitInfo.collider.GetComponent<PaddleHandler>();
                     bool hitIsOnPaddle = paddleHit != null;
 
-                    m_velocity = hitIsOnPaddle
-                        ? paddleHit.GetBallBounceVectorFromHit(hitInfo, m_velocity) * m_speedUpVal *
-                          (serving ? m_serveHitSpeedBoostMod : 1)
-                        : HelperFunctions.ReflectVectorOnNormal(m_velocity, hitInfo.normal);
+                    if (hitIsOnPaddle)
+                    {
+                        PaddleBounceResult paddleBounce = paddleHit.GetBallBounceVectorFromHit(hitInfo, m_velocity);
+                        m_velocity = paddleBounce.resultingVect * m_speedUpVal * (serving ? m_serveHitSpeedBoostMod : 1);
+                        if (isOnline && paddleBounce.hitFront && !PhotonNetwork.IsMasterClient)
+                            hitPaddleFront = true;
+                    }
+                    else
+                        m_velocity = HelperFunctions.ReflectVectorOnNormal(m_velocity, hitInfo.normal);
 
+                    
+                    
                     serving = serving && !hitIsOnPaddle;
 
                     castDist = Mathf.Max(0, castDist - hitInfo.distance);
                 }
             } while (hitSomething);
+
+            Vector3 newPos = transform.position + m_velocity * Time.deltaTime;
+            if (isOnline)
+            {
+                if (veloChanged && PhotonNetwork.IsMasterClient)
+                    m_photonView.RPC("RPCVeloSync", RpcTarget.Others, m_velocity);
+                if (hitPaddleFront && !PhotonNetwork.IsMasterClient)
+                    m_photonView.RPC("RPCPaddleBounce", RpcTarget.All, m_velocity, newPos);
+            }
             
-            transform.position += m_velocity * Time.deltaTime;
+            if (!isOnline || PhotonNetwork.IsMasterClient)
+                transform.position = newPos;
         }
 
+        [PunRPC]
+        void RPCVeloSync(Vector3 velo)
+        {
+            if (!PhotonNetwork.IsMasterClient)
+                m_velocity = velo;
+        }
+        
+        [PunRPC]
+        void RPCPaddleBounce(Vector3 veloAtHit, Vector3 posAtHit)
+        {
+            if (PhotonNetwork.IsMasterClient)
+                transform.position = posAtHit;
+            m_velocity = veloAtHit;
+        }
+        
         void HitEndzone(Endzone ez)
         {
             if (dying) return;
