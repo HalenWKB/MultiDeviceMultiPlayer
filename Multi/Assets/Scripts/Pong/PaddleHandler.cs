@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -21,6 +22,8 @@ namespace PongPlayerPaddles
         
         [SerializeField] private GameObject m_debugPreGrowthIndicator = null;
         [SerializeField] private float m_debugGrowthSpeed = 1;
+        
+        [SerializeField] private float m_bounceRegisterDistCheck = 3;
 
         private Vector3 m_startPos;
     
@@ -77,5 +80,6 @@ namespace PongPlayerPaddles
 
             return result;
         }
+
     }
 }

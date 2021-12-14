@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using PongPlayerPaddles;
@@ -37,25 +38,6 @@ namespace PongMainGameplay
         void Update()
         {
             bool isOnline = Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP;
-            /*if (Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP && !PhotonNetwork.IsMasterClient)
-             {
-                Collider[] overlapCols = Physics.OverlapBox(transform.position
-                    , transform.localScale / 2, Quaternion.identity);
-                
-
-                for (int i = 0; i < overlapCols.Length; i++)
-                {
-                    Endzone endZoneHit = overlapCols[i].GetComponent<Endzone>();
-
-                    if (endZoneHit != null)
-                    {
-                        HitEndzone(endZoneHit);
-                        return;
-                    }
-                }
-
-                return;
-            }*/
             if (dying) return;
             bool hitSomething;
             bool veloChanged = false;
@@ -105,13 +87,15 @@ namespace PongMainGameplay
                 if (veloChanged && PhotonNetwork.IsMasterClient)
                     m_photonView.RPC("RPCVeloSync", RpcTarget.Others, m_velocity);
                 if (hitPaddleFront && !PhotonNetwork.IsMasterClient)
-                    m_photonView.RPC("RPCPaddleBounce", RpcTarget.All, m_velocity, newPos);
+                    m_photonView.RPC("RPCPaddleBounce", RpcTarget.Others, m_velocity, newPos);
             }
             
             if (!isOnline || PhotonNetwork.IsMasterClient)
                 transform.position = newPos;
         }
 
+        
+        
         [PunRPC]
         void RPCVeloSync(Vector3 velo)
         {
@@ -122,29 +106,46 @@ namespace PongMainGameplay
         [PunRPC]
         void RPCPaddleBounce(Vector3 veloAtHit, Vector3 posAtHit)
         {
-            if (PhotonNetwork.IsMasterClient)
-                transform.position = posAtHit;
             m_velocity = veloAtHit;
+            if (PhotonNetwork.IsMasterClient)
+            {
+                transform.position = posAtHit;
+                m_photonView.RPC("RPCVeloSync", RpcTarget.Others, m_velocity);
+            }
+            m_RPCPaddleHitScoreOverride = true;
         }
         
         void HitEndzone(Endzone ez)
         {
             if (dying) return;
-            ez.BallHit();
             dying = true;
-            StartCoroutine(DelayedDestroy());
+            StartCoroutine(DelayedDestroyAndScore(ez));
         }
-        
-        IEnumerator DelayedDestroy()
+
+        private bool m_RPCPaddleHitScoreOverride;
+        IEnumerator DelayedDestroyAndScore(Endzone endzoneHit)
         {
-            yield return new WaitForSeconds(1);
-            if (Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP)
-            {
-                if (PhotonNetwork.IsMasterClient)
-                    PhotonNetwork.Destroy(gameObject);
-            }
+            m_RPCPaddleHitScoreOverride = false;
+            yield return new WaitForSeconds(1f);
+            if (m_RPCPaddleHitScoreOverride)
+                dying = false;
             else
-                Destroy(gameObject);
+            {
+                if (Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP)
+                {
+                    if (PhotonNetwork.IsMasterClient)
+                    {
+                        PhotonNetwork.Destroy(gameObject);
+                        endzoneHit.BallHit();
+                    }
+                }
+                else
+                {
+                    Destroy(gameObject);
+                    endzoneHit.BallHit();
+                }
+                    
+            }
         }
     }
 }

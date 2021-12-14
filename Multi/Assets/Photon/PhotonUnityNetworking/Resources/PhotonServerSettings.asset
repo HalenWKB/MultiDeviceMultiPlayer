@@ -42,6 +42,7 @@ MonoBehaviour:
   - RPC_SendTimer
   - RPCPaddleBounce
   - RPCVeloSync
+  - RPCPointScored
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

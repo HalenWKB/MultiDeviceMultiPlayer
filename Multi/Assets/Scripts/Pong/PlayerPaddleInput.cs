@@ -32,7 +32,7 @@ namespace PongPlayerPaddles
 
             if ((lInput || rInput) && !(lInput && rInput)) m_paddle.MoveInput(lInput);
             
-            if (Input.GetKey(KeyCode.LeftShift)) m_paddle.DebugGrowInput();
+            if (false && Input.GetKey(KeyCode.LeftShift)) m_paddle.DebugGrowInput();
         }
         
         void Update()

@@ -46,6 +46,20 @@ namespace PongPlayerPaddles
             m_scoreDisplay.text = m_score.ToString("N0");
         }
 
+        [PunRPC]
+        void RPCPointScored()
+        {
+            Managers.Gameplay.SomebodiesEndzoneWasHit(this);
+        }
+
+        public void MyEndzoneWasHit()
+        {
+            if (Managers.Mode.GetGameMode() == GameMode.PONG_MP_PvP && PhotonNetwork.IsMasterClient)
+                m_photonView.RPC("RPCPointScored", RpcTarget.All);
+            else
+                Managers.Gameplay.SomebodiesEndzoneWasHit(this);
+        }
+        
         public int GetScore()
         {
             return m_score;

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 
@@ -11,7 +12,7 @@ namespace PongPlayerPaddles
 
         public void BallHit()
         {
-            Managers.Gameplay.SomebodiesEndzoneWasHit(m_playerRef);
+            m_playerRef.MyEndzoneWasHit();
         }
     }
 }
