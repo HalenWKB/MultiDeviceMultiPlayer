@@ -222,7 +222,11 @@ namespace PongMainGameplay
             else
                 Managers.Scene.NetworkSceneChange(SceneCode.PongMenu);
         }
-        
+
+        public void HitQuitButton()
+        {
+            HandleLeaveGame(true);
+        }
         
         void Update()
         {
@@ -233,7 +237,7 @@ namespace PongMainGameplay
             }
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                HandleLeaveGame(true);
+                HitQuitButton();
             }
         }
     }

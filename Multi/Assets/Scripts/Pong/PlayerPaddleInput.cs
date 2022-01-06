@@ -30,6 +30,18 @@ namespace PongPlayerPaddles
             bool lInput = Input.GetKey(m_leftKey);
             bool rInput = Input.GetKey(m_rightKey);
 
+            if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
+                Vector2 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
+                float yOff = HelperFunctions.HowLeftOfRayIsPoint2D(touchPos, transform.position
+                    , transform.position - transform.right);
+                lInput = yOff > 0;
+                rInput = !lInput;
+                
+                Debug.Log(transform.position.y + " - " + touchPos + " - " + touch.position);
+            }
+            
             if ((lInput || rInput) && !(lInput && rInput)) m_paddle.MoveInput(lInput);
             
             if (false && Input.GetKey(KeyCode.LeftShift)) m_paddle.DebugGrowInput();
